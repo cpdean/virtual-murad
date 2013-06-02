@@ -61,6 +61,11 @@ exec { 'build ruby':
     cwd      => '/home/vagrant/install_files/ruby-1.9.2-p0',
 }
 
+file_line { "add ruby path":
+    path    => "/home/vagrant/.bashrc",
+    line    => "PATH=/var/lib/gems/1.8/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/ruby/bin:$PATH",
+}
+
 File {
     user  => "vagrant",
     group => "vagrant",
