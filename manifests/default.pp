@@ -26,6 +26,19 @@ $vagrant_path = [
     "/opt/vagrant_ruby/bin",
 ]
 
+
+File {
+    owner  => "vagrant",
+    group => "vagrant",
+    mode  => 0644,
+}
+
+Exec {
+    user  => "vagrant",
+    group => "vagrant",
+    path  => $vagrant_path,
+}
+
 exec { 'apt-get update':
     command => '/usr/bin/apt-get update',
     user    => 'root',
@@ -51,7 +64,7 @@ exec { 'untar ruby':
 
 exec { 'config ruby':
     require  => Exec['untar ruby'],
-    command  => './configure --prefix=/usr/local/ruby',
+    command  => '/home/vagrant/install_files/ruby-1.9.2-p0/configure --prefix=/usr/local/ruby',
     cwd      => '/home/vagrant/install_files/ruby-1.9.2-p0',
 }
 
@@ -61,21 +74,16 @@ exec { 'build ruby':
     cwd      => '/home/vagrant/install_files/ruby-1.9.2-p0',
 }
 
+/*
 file_line { "add ruby path":
     path    => "/home/vagrant/.bashrc",
-    line    => "PATH=/var/lib/gems/1.8/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/ruby/bin:$PATH",
+    line    => "PATH=/var/lib/gems/1.8/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/ruby/bin:\$PATH",
 }
+*/
 
-File {
-    user  => "vagrant",
-    group => "vagrant",
-    mode  => 0644,
-}
-
-Exec {
-    user  => "vagrant",
-    group => "vagrant",
-    path  => $vagrant_path,
+file { "/usr/local/ruby/bin/ruby":
+    ensure => 'link',
+    target => '/usr/local/bin/ruby',
 }
 
 package { $apt_packages:
