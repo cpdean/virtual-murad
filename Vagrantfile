@@ -31,5 +31,6 @@ Vagrant::Config.run do |config|
   #   puppet.manifests_path = "manifests"
   #   puppet.manifest_file  = "precise32.pp"
   # end
+  config.vm.provision :puppet
 
 end
